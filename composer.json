@@ -2,8 +2,8 @@
     "name": "litmanovitziv/struct-reader",
     "type": "library",
     "description": "Simple library to read multiple data sources",
-    "keywords": ["reader", "data sources"],
-    "homepage": "https://github.com/oscarotero/env",
+    "keywords": ["structure", "reader", "data sources"],
+    "homepage": "https://github.com/litmanovitziv/struct-reader",
     "authors": [
         {
             "name": "Ziv Litmanovitz",
