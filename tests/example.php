@@ -7,23 +7,38 @@ require_once 'src/CSVFeed.php';
 require_once 'src/XMLFeed.php';
 require_once 'src/JSONFeed.php';
 
-	$files = '../tests/data';
+	$files = './data';
 	try {
-// 		$reader = new CSVFeed("$files/FeelingSexy.txt", "\t");
-		$reader = new CSVFeed("$files/MosquitNo.csv", ",");
-// 		$reader = new JSONFeed("$files/stream1.json");
-// 		$reader = new XMLFeed("$files/sample.xml", "item");
+		if (isset($_REQUEST['input']))
+			switch ($_REQUEST['input']) {
+				case "tsv":
+					$reader = new CSVFeed("$files/tsv-example.txt", "\t");
+					break;
+				case "csv":
+					$reader = new CSVFeed("$files/csv-example.csv", ",");
+					break;
+				case "json":
+					$reader = new JSONFeed("$files/json-example.json");
+					break;
+				case "xml":
+					$reader = new XMLFeed("$files/xml-example.xml", "item");
+					break;
+				default:
+					throw new Exception("Error: file wasn't choden");
+			}
 	} catch (Exception $e) {
 		print_r($e->getMessage());
+		exit(1);
 	}
 
-	while ($reader->valid()) {
-		try {
-			// Reading a file
-			$reader->next();
-			$reader->current();
-		} catch (Exception $e) {
-			print_r($e->getMessage());
-			continue;
+	if (isset($reader))
+		while ($reader->valid()) {
+			try {
+				// Reading a file
+				$reader->next();
+				$reader->current();
+			} catch (Exception $e) {
+				print_r($e->getMessage());
+				continue;
+			}
 		}
-	}
