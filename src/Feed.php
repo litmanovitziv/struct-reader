@@ -52,6 +52,8 @@ abstract class Feed implements Iterator {
 			new dBug("record no. $this->_record_index");
 			new dBug($this->_entity);
 		}
+
+		return $this->_entity;
 	}
 
 }

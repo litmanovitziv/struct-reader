@@ -135,16 +135,8 @@
 		return null;
 	}
 	
-	function showInDebugEnv($var) {
-	
-		if (isset($_REQUEST['debug']) && ($_REQUEST['debug'] == 'true')) {
-			new dBug($var);
-		}
-
-		if (php_sapi_name() === 'cli') {
-			print_r($var);
-			echo PHP_EOL;
-		}
+	function isCLI($var) {
+		return php_sapi_name() === 'cli';
 	}
 
 ?>

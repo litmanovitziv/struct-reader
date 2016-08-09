@@ -5,29 +5,30 @@ set_include_path("./../". PATH_SEPARATOR . ini_get("include_path"));
 require_once 'vendor/autoload.php';
 require_once 'src/CSVFeed.php';
 require_once 'src/XMLFeed.php';
+require_once 'src/HTMLFeed.php';
 require_once 'src/JSONFeed.php';
 
-	$files = './data';
+	$file = __DIR__ . "/data";
 	try {
 		if (isset($_REQUEST['input']))
 			switch ($_REQUEST['input']) {
 				case "tsv":
-					$reader = new CSVFeed("$files/tsv-example.txt", "\t");
+					$reader = new CSVFeed("$file/tsv-example.txt", "\t");
 					break;
 				case "csv":
-					$reader = new CSVFeed("$files/csv-example.csv", ",");
+					$reader = new CSVFeed("$file/csv-example.csv", ",");
 					break;
 				case "json":
-					$reader = new JSONFeed("$files/json-example.json");
+					$reader = new JSONFeed("$file/json-example.json");
 					break;
 				case "xml":
-					$reader = new XMLFeed("$files/xml-example.xml", "item");
+					$reader = new XMLFeed("$file/xml-example.xml", "item");
 					break;
 				default:
 					throw new Exception("Error: file wasn't choden");
 			}
 	} catch (Exception $e) {
-		print_r($e->getMessage());
+		new dBug($e->getMessage());
 		exit(1);
 	}
 
@@ -38,7 +39,7 @@ require_once 'src/JSONFeed.php';
 				$reader->next();
 				$reader->current();
 			} catch (Exception $e) {
-				print_r($e->getMessage());
+				new dBug($e->getMessage());
 				continue;
 			}
 		}
