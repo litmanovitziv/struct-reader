@@ -4,8 +4,7 @@ set_include_path("./../". PATH_SEPARATOR . ini_get("include_path"));
 
 require_once 'vendor/autoload.php';
 require_once 'src/CSVFeed.php';
-require_once 'src/XMLFeed.php';
-require_once 'src/HTMLFeed.php';
+//require_once 'src/XMLFeed.php';
 require_once 'src/JSONFeed.php';
 
 	$file = __DIR__ . "/data";
@@ -20,9 +19,6 @@ require_once 'src/JSONFeed.php';
 					break;
 				case "json":
 					$reader = new JSONFeed("$file/json-example.json");
-					break;
-				case "xml":
-					$reader = new XMLFeed("$file/xml-example.xml", "item");
 					break;
 				default:
 					throw new Exception("Error: file wasn't choden");
