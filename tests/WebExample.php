@@ -1,30 +1,33 @@
 <?php
 
-set_include_path("./../". PATH_SEPARATOR . ini_get("include_path"));
+namespace DataPipeline;
+
+set_include_path("./../" . PATH_SEPARATOR . ini_get("include_path"));
 
 require_once 'vendor/autoload.php';
-require_once 'src/CSVFeed.php';
-//require_once 'src/XMLFeed.php';
-require_once 'src/JSONFeed.php';
+require_once 'src/reader/CSVReader.php';
+//require_once 'src/XMLReader.php';
+require_once 'src/reader/JSONReader.php';
+require_once 'src/Env.php';
 
 	$file = __DIR__ . "/data";
 	try {
 		if (isset($_REQUEST['input']))
 			switch ($_REQUEST['input']) {
 				case "tsv":
-					$reader = new CSVFeed("$file/tsv-example.txt", "\t");
+					$reader = new CSVReader("$file/tsv-example.txt", "\t", new Env($_REQUEST));
 					break;
 				case "csv":
-					$reader = new CSVFeed("$file/csv-example.csv", ",");
+					$reader = new CSVReader("$file/csv-example.csv", ",", new Env($_REQUEST));
 					break;
 				case "json":
-					$reader = new JSONFeed("$file/json-example.json");
+					$reader = new JSONReader("$file/json-example.json", new Env($_REQUEST));
 					break;
 				default:
 					throw new Exception("Error: file wasn't choden");
 			}
 	} catch (Exception $e) {
-		new dBug($e->getMessage());
+		new \dBug($e->getMessage());
 		exit(1);
 	}
 
@@ -35,7 +38,7 @@ require_once 'src/JSONFeed.php';
 				$reader->next();
 				$reader->current();
 			} catch (Exception $e) {
-				new dBug($e->getMessage());
+				new \dBug($e->getMessage());
 				continue;
 			}
 		}
