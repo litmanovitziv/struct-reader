@@ -1,22 +1,26 @@
 <?php
 
+namespace DataPipeline;
+
 // http://localhost/crawl/read/<type>Feed.php?debug=true,print,test,limit&limit=1
-set_include_path("./../". PATH_SEPARATOR . ini_get("include_path"));
+set_include_path("./../../". PATH_SEPARATOR . ini_get("include_path"));
 
 require_once 'vendor/autoload.php';
 require_once 'src/Env.php';
 
-abstract class Feed implements Iterator {
+abstract class Reader implements \Iterator {
 	protected $_file_handler;
 	protected $_entity;
 	protected $_record_index;
+	protected $_env;
 
 	/**
 	 * TODO : adding debug configuration
 	 * @param array $debug_config
 	 */
-	function __construct($debug_config = null) {
+	function __construct($debug = null) {
 		$this->_record_index = 0;
+		$this->_env = $debug;
 	}
 	
 	function getEntity() {
@@ -28,10 +32,10 @@ abstract class Feed implements Iterator {
 	}
 	
 	function valid() {
-		if (isDebugEnv() & ENV_DEBUG_LIMITED) {
-			if ($this->_record_index > getMaxIterarions()) {
+		if ($this->_env->isDebugEnv() & ENV_DEBUG_LIMITED) {
+			if ($this->_record_index > $this->_env->getMaxIterarions()) {
 				$this->_record_index = 0;
-				echo "Warning : Stopped because of limit is over<br />";
+				echo "Warning : Stopped because of limit is over" . PHP_EOL;
 				return false;
 			}
 		}
@@ -48,9 +52,10 @@ abstract class Feed implements Iterator {
 	}
 	
 	function current() {
-		if (isDebugEnv() & ENV_DEBUG_PRINTED) {
-			new dBug("record no. $this->_record_index");
-			new dBug($this->_entity);
+		if ($this->_env->isDebugEnv() & ENV_DEBUG_PRINTED) {
+			echo "record no. $this->_record_index" . PHP_EOL;
+			var_dump($this->_entity);
+			echo PHP_EOL;
 		}
 
 		return $this->_entity;
